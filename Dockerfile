@@ -14,6 +14,12 @@ ENV LOG_CHANNEL stderr
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+RUN mkdir -p storage/framework/cache \
+    storage/framework/sessions \
+    storage/framework/views \
+    storage/logs \
+    bootstrap/cache
 
-CMD ["/start.sh"]
+RUN chown -R www-data:www-data storage bootstrap/cache
+
+CMD ["sh", "-c", "php artisan migrate --force && /start.sh"]
