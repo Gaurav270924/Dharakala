@@ -14,4 +14,10 @@ ENV LOG_CHANNEL stderr
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+RUN php artisan config:clear
+RUN php artisan route:clear
+RUN php artisan view:clear
+
 CMD ["/start.sh"]
