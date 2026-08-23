@@ -23,18 +23,18 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copy Composer files first
 COPY composer.json composer.lock ./
 
-# IMPORTANT: create vendor/autoload.php during BUILD
 RUN composer install \
     --no-dev \
     --no-interaction \
     --prefer-dist \
-    --optimize-autoloader
+    --optimize-autoloader \
+    --no-scripts
 
-# Copy application
 COPY . .
+
+RUN composer dump-autoload --optimize
 
 # Laravel permissions
 RUN mkdir -p storage/framework/cache \
