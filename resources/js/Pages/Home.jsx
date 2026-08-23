@@ -15,7 +15,15 @@ import { FinalCTA, EnquireForm } from '@/Components/Contact';
 import Footer from '@/Components/Footer';
 
 export default function Home() {
-  const { projects, journalEntries, materials, locations, stats, manifestoPrinciples, ventures } = usePage().props;
+  const {
+    projects = [],
+    journalEntries = [],
+    materials = [],
+    locations = [],
+    stats = [],
+    manifestoPrinciples = [],
+    ventures = [],
+  } = usePage().props;
 
   const navigate = useCallback((id) => {
     const el = document.getElementById(id);
