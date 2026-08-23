@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useForm } from '@inertiajs/react';
-import { ArrowUpRight, Mail, MapPin, Phone } from 'lucide-react';
+import { ArrowUpRight, ChevronDown, Mail, MapPin, Phone } from 'lucide-react';
 import { useReducedMotion } from '@/hooks/useScroll';
 
 export function FinalCTA({ onNavigate }) {
@@ -105,26 +105,32 @@ export function EnquireForm() {
                 error={errors.phone}
               />
               <div>
-                <label className="label-eyebrow text-ink-muted block mb-2">Interest</label>
-                <select
-                  name="interest"
-                  value={data.interest}
-                  onChange={(e) => setData('interest', e.target.value)}
-                  data-cursor="hover"
-                  className="w-full bg-transparent border-b border-line py-3 text-ink focus:border-brand-green focus:outline-none transition-colors"
-                >
-                  <option>Residential</option>
-                  <option>Commercial</option>
-                  <option>Townships</option>
-                  <option>Plotted</option>
-                  <option>Mixed-Use</option>
-                  <option>General Enquiry</option>
-                </select>
+                <label htmlFor="interest" className="label-eyebrow text-ink-muted block mb-2">Interest</label>
+                <div className="relative">
+                  <select
+                    id="interest"
+                    name="interest"
+                    value={data.interest}
+                    onChange={(e) => setData('interest', e.target.value)}
+                    data-cursor="hover"
+                    className="w-full appearance-none bg-transparent border-b border-line py-3 pr-8 text-ink focus:border-brand-green focus:outline-none transition-colors"
+                  >
+                    <option>Residential</option>
+                    <option>Commercial</option>
+                    <option>Townships</option>
+                    <option>Plotted</option>
+                    <option>Mixed-Use</option>
+                    <option>General Enquiry</option>
+                  </select>
+                  <ChevronDown size={16} strokeWidth={1.5} className="pointer-events-none absolute right-1 top-1/2 -translate-y-1/2 text-ink-muted" />
+                </div>
+                {errors.interest && <p className="text-red-500 text-xs mt-1">{errors.interest}</p>}
               </div>
             </div>
             <div>
-              <label className="label-eyebrow text-ink-muted block mb-2">Message</label>
+              <label htmlFor="message" className="label-eyebrow text-ink-muted block mb-2">Message</label>
               <textarea
+                id="message"
                 name="message"
                 rows={4}
                 value={data.message}
@@ -133,6 +139,7 @@ export function EnquireForm() {
                 className="w-full bg-transparent border-b border-line py-3 text-ink focus:border-brand-green focus:outline-none transition-colors resize-none"
                 placeholder="Tell us a little about what you are looking for."
               />
+              {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
             </div>
             <button
               type="submit"
@@ -147,7 +154,7 @@ export function EnquireForm() {
         )}
 
         <div className="mt-16 pt-10 border-t border-line grid grid-cols-1 md:grid-cols-3 gap-6">
-          <ContactItem icon={Mail} label="Email" value="hello@studiovastu.in" />
+          <ContactItem icon={Mail} label="Email" value="hello@dharakala.in" />
           <ContactItem icon={Phone} label="Phone" value="+91 522 400 4400" />
           <ContactItem icon={MapPin} label="Studio" value="Hazratganj, Lucknow" />
         </div>
@@ -161,11 +168,12 @@ function Field({
 }) {
   return (
     <div>
-      <label className="label-eyebrow text-ink-muted block mb-2">
+      <label htmlFor={name} className="label-eyebrow text-ink-muted block mb-2">
         {label}{required && <span className="text-brand-green"> *</span>}
       </label>
       <input
         name={name}
+        id={name}
         type={type}
         required={required}
         value={value}

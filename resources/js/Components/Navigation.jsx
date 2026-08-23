@@ -163,7 +163,7 @@ export default function Navigation({ onNavigate }) {
                 <div className="flex gap-6 nav-link text-ink-muted">
                   <a href="#" data-cursor="hover" className="hover:text-brand-green transition-colors">Instagram</a>
                   <a href="#" data-cursor="hover" className="hover:text-brand-green transition-colors">LinkedIn</a>
-                  <a href="mailto:hello@studiovastu.in" data-cursor="hover" className="hover:text-brand-green transition-colors">Email</a>
+                  <a href="mailto:hello@dharakala.in" data-cursor="hover" className="hover:text-brand-green transition-colors">Email</a>
                 </div>
               </div>
             </div>

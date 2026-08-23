@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useReducedMotion, useInView } from '@/hooks/useScroll';
 
@@ -85,21 +85,28 @@ function Counter({ value, inView, reduce }) {
   const ref = useRef(null);
   const duration = 1500;
   const startRef = useRef(0);
+  const [displayValue, setDisplayValue] = useState(0);
 
-  if (inView && !reduce && ref.current && !startRef.current) {
+  useEffect(() => {
+    if (!inView || reduce) {
+      setDisplayValue(value);
+      return undefined;
+    }
+
     startRef.current = performance.now();
+    let frame;
     const tick = (now) => {
       const t = Math.min((now - startRef.current) / duration, 1);
       const eased = 1 - Math.pow(1 - t, 3);
-      if (ref.current) ref.current.textContent = String(Math.round(eased * value));
-      if (t < 1) requestAnimationFrame(tick);
+      setDisplayValue(Math.round(eased * value));
+      if (t < 1) frame = requestAnimationFrame(tick);
     };
-    requestAnimationFrame(tick);
-  } else if (ref.current) {
-    ref.current.textContent = String(value);
-  }
+    frame = requestAnimationFrame(tick);
 
-  return <span ref={ref} className="fluid-stat font-serif text-brand-cream">{inView ? '' : '0'}</span>;
+    return () => cancelAnimationFrame(frame);
+  }, [inView, reduce, value]);
+
+  return <span ref={ref} className="fluid-stat font-serif text-brand-cream">{displayValue}</span>;
 }
 
 export function Interlude() {

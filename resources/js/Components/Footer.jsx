@@ -41,7 +41,7 @@ export default function Footer({ onNavigate }) {
             <ul className="space-y-2">
               <li><a href="#" data-cursor="hover" className="text-sm text-brand-cream/80 hover:text-brand-cream transition-colors">Instagram</a></li>
               <li><a href="#" data-cursor="hover" className="text-sm text-brand-cream/80 hover:text-brand-cream transition-colors">LinkedIn</a></li>
-              <li><a href="mailto:hello@studiovastu.in" data-cursor="hover" className="text-sm text-brand-cream/80 hover:text-brand-cream transition-colors">Email</a></li>
+              <li><a href="mailto:hello@dharakala.in" data-cursor="hover" className="text-sm text-brand-cream/80 hover:text-brand-cream transition-colors">Email</a></li>
             </ul>
           </div>
           <div>
