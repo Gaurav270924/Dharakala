@@ -11,7 +11,7 @@ function matches(p, f) {
   return p.category === f || p.status === f;
 }
 
-export default function Collection({ projects }) {
+export default function Collection({ projects = [] }) {
   const [filter, setFilter] = useState('All');
   const [hovered, setHovered] = useState(null);
   const isTouch = useMediaQuery('(hover: none), (pointer: coarse)');

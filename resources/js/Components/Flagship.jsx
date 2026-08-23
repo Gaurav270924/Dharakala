@@ -4,7 +4,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { useReducedMotion } from '@/hooks/useScroll';
 import { enterProject } from '@/lib/transitions';
 
-export default function Flagship({ projects }) {
+export default function Flagship({ projects=[]}) {
   const ref = useRef(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
@@ -13,6 +13,9 @@ export default function Flagship({ projects }) {
   const textY = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [80, -40]);
 
   const project = projects.find((p) => p.featured && p.status === 'Ongoing') ?? projects[0];
+  if (!project) {
+  return null;
+}
 
   return (
     <section ref={ref} id="flagship" className="relative h-[100svh] min-h-[600px] w-full overflow-hidden bg-brand-deep">
