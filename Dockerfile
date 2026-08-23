@@ -1,27 +1,61 @@
-FROM richarvey/nginx-php-fpm:3.1.6
+FROM php:8.3-fpm
 
+# System dependencies
+RUN apt-get update && apt-get install -y \
+    nginx \
+    supervisor \
+    git \
+    unzip \
+    libpq-dev \
+    libzip-dev \
+    libicu-dev \
+    && docker-php-ext-install \
+        pdo \
+        pdo_pgsql \
+        mbstring \
+        bcmath \
+        intl \
+        zip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+WORKDIR /var/www/html
+
+# Copy Composer files first
+COPY composer.json composer.lock ./
+
+# IMPORTANT: create vendor/autoload.php during BUILD
+RUN composer install \
+    --no-dev \
+    --no-interaction \
+    --prefer-dist \
+    --optimize-autoloader
+
+# Copy application
 COPY . .
 
-ENV SKIP_COMPOSER 0
-ENV WEBROOT /var/www/html/public
-ENV PHP_ERRORS_STDERR 1
-ENV RUN_SCRIPTS 1
-ENV REAL_IP_HEADER 1
-
-ENV APP_ENV production
-ENV APP_DEBUG false
-ENV LOG_CHANNEL stderr
-
-ENV COMPOSER_ALLOW_SUPERUSER 1
-
-RUN composer install --no-dev --optimize-autoloader --no-interaction
-
+# Laravel permissions
 RUN mkdir -p storage/framework/cache \
     storage/framework/sessions \
     storage/framework/views \
-    storage/logs \
-    bootstrap/cache
+    bootstrap/cache \
+    && chown -R www-data:www-data \
+        storage \
+        bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
-RUN chown -R www-data:www-data storage bootstrap/cache
+# Nginx configuration
+COPY docker/nginx.conf /etc/nginx/sites-available/default
 
-CMD ["sh", "-c", "php artisan migrate --force && /start.sh"]
+# PHP-FPM configuration
+COPY docker/php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
+
+# Supervisor configuration
+COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Render uses port 10000
+EXPOSE 10000
+
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
