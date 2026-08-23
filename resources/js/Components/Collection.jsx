@@ -17,7 +17,7 @@ export default function Collection({ projects = [] }) {
   const isTouch = useMediaQuery('(hover: none), (pointer: coarse)');
   const reduce = useReducedMotion();
 
-  const list = projects.filter((p) => matches(p, filter));
+  const list = projects.filter(Boolean).filter((p) => matches(p, filter));
 
   return (
     <section id="collection" className="relative bg-brand-cream">
